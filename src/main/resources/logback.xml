@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true" scanPeriod="30 seconds">
+
+	<jmxConfigurator />
+	
+	<!-- N.B. the delay is set to avoid having logback stop before the service -->
+	<shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook">
+		<delay>5000</delay>
+	</shutdownHook>
+		
+	<appender name="LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>c:/undertowLog/logs/fileProcessing.log</file>
+		<append>true</append>
+		<encoder>
+			<pattern>%date{ISO8601, UTC} %level [%thread] %logger{10} %msg%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>c:/undertowLog/logs/fileProcessing.log-%d{yyyy-MM-dd, UTC}-%i.gz</fileNamePattern>
+			<maxFileSize>50MB</maxFileSize>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+	</appender> 
+    
+    <!-- 
+	<appender name="LOG" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %-5level [%thread] %logger{5} %msg%n</pattern>
+		</encoder>
+	</appender>
+ 	-->
+ 
+	<root level="INFO">
+		<appender-ref ref="LOG" />
+	</root>
+
+	<logger name="io.undertow" level="INFO" additivity="false">
+		<appender-ref ref="LOG" />
+	</logger>
+ 
+	<logger name="com.test" level="INFO" additivity="false">
+		<appender-ref ref="LOG" />
+	</logger>
+
+	<logger name="org.springframework" level="INFO" additivity="false">
+		<appender-ref ref="LOG"/>
+	</logger>
+	
+</configuration>
